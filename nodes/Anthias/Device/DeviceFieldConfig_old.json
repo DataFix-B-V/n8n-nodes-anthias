@@ -1,0 +1,15 @@
+{
+	"name": "Device",
+	"getDeviceSettings": {
+		"url": "/device_settings",
+		"method": "GET",
+		"urlParams": []
+	},
+	"updateDeviceSettings": {
+		"url": "/device_settings",
+		"method": "PATCH",
+		"urlParams": []
+	}
+}
+
+

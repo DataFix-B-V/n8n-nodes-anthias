@@ -1,0 +1,56 @@
+{
+	"name": "Asset",
+	"getAllAssets": {
+		"url": "/assets",
+		"method": "GET",
+		"urlParams": []
+	},
+	"createAsset": {
+		"url": "/assets",
+		"method": "POST",
+		"urlParams": []
+	},
+	"getAsset": {
+		"url": "/assets/{assetId}",
+		"method": "GET",
+		"urlParams": [
+			"assetId"
+		]
+	},
+	"updateAsset": {
+		"url": "/assets/{assetId}",
+		"method": "PUT",
+		"urlParams": [
+			"assetId"
+		]
+	},
+	"deleteAsset": {
+		"url": "/assets/{assetId}",
+		"method": "DELETE",
+		"urlParams": [
+			"assetId"
+		]
+	},
+	"getAssetContent": {
+		"url": "/assets/{assetId}/content",
+		"method": "GET",
+		"urlParams": [
+			"assetId"
+		]
+	},
+	"controlAssetPlayback": {
+		"url": "/assets/control/{command}",
+		"method": "GET",
+		"urlParams": [
+			"command"
+		]
+	},
+	"updatePlaylistOrder": {
+		"url": "/assets/order",
+		"method": "POST",
+		"urlParams": []
+	}
+}
+
+
+

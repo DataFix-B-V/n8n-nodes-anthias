@@ -1,0 +1,29 @@
+{
+	"createAsset": {
+		"name": "",
+		"uri": "",
+		"start_date": "",
+		"end_date": "",
+		"duration": "",
+		"mimetype": "",
+		"is_enabled": "",
+		"is_processing": "",
+		"nocache": "",
+		"play_order": "",
+		"skip_asset_check": ""
+	},
+	"updateAsset": {
+		"name": "",
+		"start_date": "",
+		"end_date": "",
+		"duration": "",
+		"is_enabled": "",
+		"is_processing": "",
+		"nocache": "",
+		"play_order": "",
+		"skip_asset_check": ""
+	},
+	"updatePlaylistOrder": {
+		"asset_ids": ""
+	}
+}

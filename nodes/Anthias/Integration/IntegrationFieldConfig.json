@@ -1,0 +1,11 @@
+{
+	"name": "Integration",
+	"getIntegrationsInformation": {
+		"url": "/integrations",
+		"method": "GET",
+		"urlParams": []
+	}
+}
+
+
+

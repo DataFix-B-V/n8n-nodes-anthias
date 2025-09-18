@@ -1,0 +1,35 @@
+{
+	"name": "Device",
+	"getDeviceSettings": {
+		"url": "/device_settings",
+		"method": "GET",
+		"urlParams": []
+	},
+	"updateDeviceSettings": {
+		"url": "/device_settings",
+		"method": "PATCH",
+		"urlParams": []
+	},
+	"getSystemInfo": {
+		"url": "/info",
+		"method": "GET",
+		"urlParams": []
+	},
+	"getIntegrationsInformation": {
+		"url": "/integrations",
+		"method": "GET",
+		"urlParams": []
+	},
+	"rebootDevice": {
+		"url": "/reboot",
+		"method": "POST",
+		"urlParams": []
+	},
+	"shutdownDevice": {
+		"url": "/shutdown",
+		"method": "POST",
+		"urlParams": []
+	}
+}
+
+

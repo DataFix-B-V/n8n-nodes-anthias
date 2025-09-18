@@ -1,0 +1,11 @@
+{
+	"name": "File",
+	"uploadFileAsset": {
+		"url": "/file_asset",
+		"method": "POST",
+		"urlParams": []
+	}
+}
+
+
+

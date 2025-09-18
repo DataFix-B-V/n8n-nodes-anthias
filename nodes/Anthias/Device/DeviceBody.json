@@ -1,0 +1,19 @@
+{
+	"updateDeviceSettings" : {
+		"player_name": "",
+		"audio_output": "",
+		"default_duration": 0,
+		"default_streaming_duration": 0,
+		"date_format": "",
+		"show_splash": true,
+		"default_assets": true,
+		"shuffle_playlist": true,
+		"use_24_hour_clock": true,
+		"debug_logging": true,
+		"username": "",
+		"password": "",
+		"password_2": "",
+		"auth_backend": "",
+		"current_password": ""
+	}
+}
