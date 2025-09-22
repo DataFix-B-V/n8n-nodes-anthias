@@ -6,10 +6,10 @@
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://datafix.nl",
   "author": {
-    "name": "Datafix",
-    "email": "info@datafix.nl"
+    "name": "DataFix",
+    "email": "hi@datafix.nl"
   },
   "repository": {
     "type": "git",
