@@ -13,7 +13,7 @@ The n8n-nodes-anthias node acts as a bridge between n8n and the Anthias API. It 
 - Trigger actions on a player, such as a reboot or a content refresh.
 
 ## Developer
-![logo](https://github.com/datafix-b-v/n8n-nodes-anthias/blob/master/Images/logoDataFix.png)
+![logo](https://github.com/datafix-b-v/n8n-nodes-anthias/blob/master/images/logoDataFix.png)
 
 This node was created by [DataFix B.V.](https://datafix.nl), a n8n expert partner from the Netherlands.
 
