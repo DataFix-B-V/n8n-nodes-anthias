@@ -1,15 +1,10 @@
-import { IDataObject, IExecuteFunctions, IHookFunctions, IHttpRequestMethods, ILoadOptionsFunctions, IRequestOptions, IWebhookFunctions } from "n8n-workflow";
+import { IDataObject, IExecuteFunctions, IHookFunctions, IHttpRequestMethods, ILoadOptionsFunctions, IHttpRequestOptions, IWebhookFunctions } from "n8n-workflow";
 
 import assetsConfig from './Assets/AssetsFieldConfig.json';
-// import backupConfig from './Backup/BackupFieldConfig.json';
 import deviceConfig from './Device/DeviceFieldConfig.json';
-// import fileConfig from './File/FileFieldConfig.json';
-// import infoConfig from './Info/InfoFieldConfig.json';
-// import integrationConfig from './Integration/IntegrationFieldConfig.json';
-// import powerConfig from './Power/PowerFieldConfig.json';
 
-import assetsBody from './Assets/AssetsBody.json';
-import deviceBody from './Device/DeviceBody.json';
+
+export type AnthiasRequestResponse = IDataObject | IDataObject[] | string | number | boolean | null;
 
 export async function makeRequest(
 	this: IExecuteFunctions,
@@ -17,168 +12,112 @@ export async function makeRequest(
 	baseUrl: string,
 	extraUrl: string,
 	body: object = {},
-): Promise<any> {
+): Promise<AnthiasRequestResponse> {
 
+	// Get credentials
 	const credentialType = 'anthiasCredentialsApi';
 	const credentials = await this.getCredentials(credentialType);
 
+	// Overwrite baseUrl if  not specified in node parameters
 	if (!(baseUrl?.length>0)) {
 		baseUrl = credentials.baseUrl as string;
 	}
 
+	// Construct full endpoint URL
 	const endpoint = `${baseUrl}${extraUrl}`;
-
-	this.logger.info(`${endpoint}`);
-
-	const options: IRequestOptions = {
+	const options: IHttpRequestOptions = {
 		method,
 		body,
-		uri: endpoint,
-		json: true, // parse response as JSON automatically
+		url: endpoint,
+		json: true,
 	};
 	// Send request using n8n’s built-in helper
 	const temp = await this.helpers.requestWithAuthentication.call(this, credentialType, options);
-	// this.logger.info(''+temp.length)
-	// this.logger.info(JSON.stringify(temp))
 	return temp;
 }
 
-export async function getEndpoint(
-	this: IExecuteFunctions | IWebhookFunctions | IHookFunctions | ILoadOptionsFunctions,
+export type RequestOptionsTuple = [string, string, string[]];
+
+export async function createRequestOptions(
+	this: IExecuteFunctions,
 	resource: string,
-	operation: string):Promise<string>{
-	let operationConfig;
-	let keyword = 'url'
+	operation: string,
+): Promise<RequestOptionsTuple> {
 
-	// Logging
-	this.logger.info(`Getting endpoint for resource=${resource} | operation=${operation}`);
+	try {
+		switch (resource) {
+			case 'asset':
+				let assetConfig = assetsConfig[operation as keyof typeof assetsConfig];
+				if (typeof assetConfig === 'object' && assetConfig !== null) {
+					return [assetConfig.url, assetConfig.method, assetConfig.urlParams];
+				} else {
+					throw new Error(`Invalid assetConfig for operation: ${operation}`);
+				}
+			case 'device':
+				let deviceConfigItem = deviceConfig[operation as keyof typeof deviceConfig];
+				if (typeof deviceConfigItem === 'object' && deviceConfigItem !== null) {
+					return [deviceConfigItem.url, deviceConfigItem.method, deviceConfigItem.urlParams];
+				} else {
+					throw new Error(`Invalid deviceConfig for operation: ${operation}`);
+				}
+			default:
+				   return ['', '', []];
+		}
+	} catch (error) {
 
-	switch(resource){
-		case 'asset':
-			operationConfig = assetsConfig[operation as keyof typeof assetsConfig];
-			return operationConfig[keyword as keyof typeof operationConfig];
-		// case 'backup':
-		// 	operationConfig = backupConfig[operation as keyof typeof backupConfig];
-		// 	return operationConfig[keyword as keyof typeof operationConfig];
-		case 'device':
-			operationConfig = deviceConfig[operation as keyof typeof deviceConfig];
-			return operationConfig[keyword as keyof typeof operationConfig];
-		// case 'file':
-		// 	operationConfig = fileConfig[operation as keyof typeof fileConfig];
-		// 	return operationConfig[keyword as keyof typeof operationConfig];
-		// case 'info':
-		// 	operationConfig = infoConfig[operation as keyof typeof infoConfig];
-		// 	return operationConfig[keyword as keyof typeof operationConfig];
-		// case 'integration':
-		// 	operationConfig = integrationConfig[operation as keyof typeof integrationConfig];
-		// 	return operationConfig[keyword as keyof typeof operationConfig];
-		// case 'power':
-		// 	operationConfig = powerConfig[operation as keyof typeof powerConfig];
-		// 	return operationConfig[keyword as keyof typeof operationConfig];
+		throw error;
 	}
-
-	// Default return to satisfy all code paths
-	return '';
 }
 
-export async function getUrlParams(
-	this: IExecuteFunctions | IWebhookFunctions | IHookFunctions | ILoadOptionsFunctions,
-	resource: string,
-	operation: string):Promise<string>{
-		let operationConfig;
-		let keyword = 'urlParams'
-
-		// Logging
-		this.logger.info(`Getting URL params for resource=${resource} | operation=${operation}`);
-
-		switch(resource){
-			case 'asset':
-				operationConfig = assetsConfig[operation as keyof typeof assetsConfig];
-				return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'backup':
-			// 	operationConfig = backupConfig[operation as keyof typeof backupConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			case 'device':
-				operationConfig = deviceConfig[operation as keyof typeof deviceConfig];
-				return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'file':
-			// 	operationConfig = fileConfig[operation as keyof typeof fileConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'info':
-			// 	operationConfig = infoConfig[operation as keyof typeof infoConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'integration':
-			// 	operationConfig = integrationConfig[operation as keyof typeof integrationConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'power':
-			// 	operationConfig = powerConfig[operation as keyof typeof powerConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-		}
-		// Default return to satisfy all code paths
-		return '';
-}
-
-export async function getMethod(
-	this: IExecuteFunctions | IWebhookFunctions | IHookFunctions | ILoadOptionsFunctions,
-	resource: string,
-	operation: string):Promise<string>{
-		let operationConfig;
-		let keyword = 'method'
-
-		// Logging
-		this.logger.info(`Getting method for resource=${resource} | operation=${operation}`);
-
-		switch(resource){
-			case 'asset':
-				operationConfig = assetsConfig[operation as keyof typeof assetsConfig];
-				return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'backup':
-			// 	operationConfig = backupConfig[operation as keyof typeof backupConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			case 'device':
-				operationConfig = deviceConfig[operation as keyof typeof deviceConfig];
-				return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'file':
-			// 	operationConfig = fileConfig[operation as keyof typeof fileConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'info':
-			// 	operationConfig = infoConfig[operation as keyof typeof infoConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'integration':
-			// 	operationConfig = integrationConfig[operation as keyof typeof integrationConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-			// case 'power':
-			// 	operationConfig = powerConfig[operation as keyof typeof powerConfig];
-			// 	return operationConfig[keyword as keyof typeof operationConfig];
-		}
-		// Default return to satisfy all code paths
-		return '';
-}
-
+// Function to generate the request body based on resource, operation, and node parameters
 export async function getBody(
-  this: IExecuteFunctions | IWebhookFunctions | IHookFunctions | ILoadOptionsFunctions,
-  resource: string,
-  operation: string,
-  itemIndex: number,
+	this: IExecuteFunctions | IWebhookFunctions | IHookFunctions | ILoadOptionsFunctions,
+	resource: string,
+	operation: string,
+	itemIndex: number,
 ): Promise<IDataObject> {
+	try {
+		// Dynamic body builder based on node parameters
+		const defaultParameters = ['overwriteBaseUrl', 'resource', 'operation', 'options'];
+		const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
 
-  let template: IDataObject | undefined;
-  if (resource === 'asset') {
-    template = assetsBody[operation as keyof typeof assetsBody] as unknown as IDataObject;
-  }
-	if (resource === 'device') {
-		template = deviceBody[operation as keyof typeof deviceBody] as unknown as IDataObject;
-	}
+		let parameters: IDataObject = {};
+		for (const [key, value] of Object.entries(this.getNode().parameters)) {
+			this.logger.debug(`Processing parameter: ${key} with value: ${value}`);
+			if (!defaultParameters.includes(key) && value !== '') {
+				parameters[key] = this.getNodeParameter(key, itemIndex, {}) as IDataObject;
+			}
+		}
 
-  if (!template) {
+		// Merging parameters and options into the final body
+		let template: IDataObject | undefined;
+		if (resource === 'asset') {
+			template = {
+				...parameters,
+				"skip_asset_check": true,
+				...options
+			};
+			return template ?? {};
+		}
+		if (resource === 'device') {
+			if (operation === 'updateDeviceSettings') {
+				// Get credentials
+				let credentials = await this.getCredentials('anthiasCredentialsApi');
+				let password = credentials.password as string;
+				let username = credentials.username as string;
+
+				template = {
+					...parameters,
+					current_password: password,
+					username: username,
+					...options
+				};
+			};
+			return template ?? {};
+		}
 		return {};
+	} catch (error) {
+		this.logger?.error?.(`Error in getBody for resource: ${resource}, operation: ${operation}`, error);
+		throw error;
 	}
-
-  const body: IDataObject = {};
-  for (const key of Object.keys(template)) {
-    body[key] = this.getNodeParameter(key, itemIndex, template[key]);
-  }
-
-  return body;
 }
-

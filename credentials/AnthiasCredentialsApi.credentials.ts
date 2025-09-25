@@ -7,7 +7,7 @@ import {
 
 export class AnthiasCredentialsApi implements ICredentialType {
 	name = 'anthiasCredentialsApi';
-	displayName = 'Anthias Crendentials API';
+	displayName = 'Anthias Credentials API';
 
 	documentationUrl = 'https://your-docs-url';
 
@@ -58,8 +58,8 @@ export class AnthiasCredentialsApi implements ICredentialType {
 	// The block below tells how this credential can be tested
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://example.com/',
-			url: '',
+			baseURL: '={{ $credentials.baseUrl }}',
+			url: '/info',
 		},
 	};
 }

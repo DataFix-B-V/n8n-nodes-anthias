@@ -1,5 +1,5 @@
 {
-  "name": "@datafix/n8n-nodes-anthias",
+  "name": "n8n-nodes-anthias",
   "version": "0.1.0",
   "description": "This is a test node package",
   "keywords": [

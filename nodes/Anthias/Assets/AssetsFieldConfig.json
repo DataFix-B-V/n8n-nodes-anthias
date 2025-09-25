@@ -19,7 +19,7 @@
 	},
 	"updateAsset": {
 		"url": "/assets/{assetId}",
-		"method": "PUT",
+		"method": "PATCH",
 		"urlParams": [
 			"assetId"
 		]
