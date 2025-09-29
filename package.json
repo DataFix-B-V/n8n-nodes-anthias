@@ -1,6 +1,6 @@
 {
   "name": "@datafix/n8n-nodes-anthias",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "This is a test node package",
   "keywords": [
     "n8n-community-node-package"
