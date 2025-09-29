@@ -1,12 +1,13 @@
-import type {
+import {
 	IDataObject,
 	IExecuteFunctions,
 	IHttpRequestMethods,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	NodeConnectionType,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+
 import { makeRequest, getBody, createRequestOptions } from './GenericFunctions';
 
 import { assetsDescription } from './Assets/AssetsDescription';
@@ -66,18 +67,14 @@ export class Anthias implements INodeType {
 // Return of all the input data
 async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 	const baseUrlOverwrite = (this.getNodeParameter('overwriteBaseUrl', 0, '') as string || '').trim();
+	const resource = this.getNodeParameter('resource', 0) as string;
+	const operation = this.getNodeParameter('operation', 0) as string;
 
 	const items = this.getInputData();
 	const returnData: INodeExecutionData[] = [];
 
 	for (let i = 0; i < items.length; i++) {
 		try {
-			// Get resource and operation
-			const resource = this.getNodeParameter('resource', i) as string;
-			const operation = this.getNodeParameter('operation', i) as string;
-
-			// Generate body based on node parameters
-			const body = await getBody.call(this, resource, operation, i);
 
 			// Create request options
 			let [endpoint, method, urlParams] = await createRequestOptions.call(this, resource, operation);
@@ -87,6 +84,9 @@ async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 				const value = String(this.getNodeParameter(param, i, '')).trim();
 				endpoint = endpoint.replace(`{${param}}`, value);
 			}
+
+			// Generate body based on node parameters
+			const body = await getBody.call(this, resource, operation, i);
 
 			// Make the request
 			const response = await makeRequest.call(this, method as IHttpRequestMethods, baseUrlOverwrite, endpoint, body);

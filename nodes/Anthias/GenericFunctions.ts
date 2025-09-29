@@ -61,10 +61,10 @@ export async function createRequestOptions(
 					throw new Error(`Invalid deviceConfig for operation: ${operation}`);
 				}
 			default:
-				   return ['', '', []];
+				this.logger.debug('Something went wrong, an invalid resource config was requested.')
+				return ['', '', []];
 		}
 	} catch (error) {
-
 		throw error;
 	}
 }
@@ -88,34 +88,21 @@ export async function getBody(
 				parameters[key] = this.getNodeParameter(key, itemIndex, {}) as IDataObject;
 			}
 		}
-
 		// Merging parameters and options into the final body
-		let template: IDataObject | undefined;
+		let body: IDataObject | undefined = {
+			...parameters,
+			...options
+		};
 		if (resource === 'asset') {
-			template = {
-				...parameters,
-				"skip_asset_check": true,
-				...options
-			};
-			return template ?? {};
+			body["skip_asset_check"] = true;
 		}
-		if (resource === 'device') {
-			if (operation === 'updateDeviceSettings') {
-				// Get credentials
-				let credentials = await this.getCredentials('anthiasCredentialsApi');
-				let password = credentials.password as string;
-				let username = credentials.username as string;
-
-				template = {
-					...parameters,
-					current_password: password,
-					username: username,
-					...options
-				};
-			};
-			return template ?? {};
+		if (resource === 'device' && operation === 'updateDeviceSettings') {
+			// Get credentials
+			let credentials = await this.getCredentials('anthiasCredentialsApi');
+			body["current_password"] = credentials.password as string;
+			body["username"] = credentials.username as string;
 		}
-		return {};
+		return body;
 	} catch (error) {
 		this.logger?.error?.(`Error in getBody for resource: ${resource}, operation: ${operation}`, error);
 		throw error;
