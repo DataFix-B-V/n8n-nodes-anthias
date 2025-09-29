@@ -23,7 +23,6 @@ export const assetsDescription: INodeProperties[] = [
 			}
 		},
   },
-
 	{
 		displayName: 'Playlist Order',
 		name: 'ids',
