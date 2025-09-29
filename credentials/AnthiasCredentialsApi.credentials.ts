@@ -9,7 +9,7 @@ export class AnthiasCredentialsApi implements ICredentialType {
 	name = 'anthiasCredentialsApi';
 	displayName = 'Anthias Credentials API';
 
-	documentationUrl = 'https://your-docs-url';
+	documentationUrl = 'https://github.com/Screenly/Anthias/blob/master/docs/README.md#accessing-the-rest-api';
 
 	properties: INodeProperties[] = [
 		// The credentials to get from user and save encrypted.
