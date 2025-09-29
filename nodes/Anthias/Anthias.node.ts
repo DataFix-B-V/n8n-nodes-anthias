@@ -6,12 +6,14 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	NodeConnectionType,
+	NodeApiError,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import { makeRequest, getBody, createRequestOptions } from './GenericFunctions';
-
 import { assetsDescription } from './Assets/AssetsDescription';
 import { deviceDescription } from './Device/DeviceDescription';
+
 
 export class Anthias implements INodeType {
 	description: INodeTypeDescription = {
@@ -70,60 +72,88 @@ async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 	const resource = this.getNodeParameter('resource', 0) as string;
 	const operation = this.getNodeParameter('operation', 0) as string;
 
+	if (!resource) {
+			throw new NodeOperationError(this.getNode(), '“Resource” is required.');
+		}
+	if (!operation) {
+			throw new NodeOperationError(this.getNode(), '“Operation” is required for the selected resource.');
+		}
+
 	const items = this.getInputData();
 	const returnData: INodeExecutionData[] = [];
 
+
 	for (let i = 0; i < items.length; i++) {
-		try {
+			try {
+				// Create request options for this resource/operation
+				let [endpoint, method, urlParams] = await createRequestOptions.call(this, resource, operation);
 
-			// Create request options
-			let [endpoint, method, urlParams] = await createRequestOptions.call(this, resource, operation);
+				// Replace required URL params; validate presence
+				for (const param of urlParams) {
+					const value = String(this.getNodeParameter(param, i, '')).trim();
+					if (!value) {
+						throw new NodeOperationError(this.getNode(), `Missing required parameter: “${param}”`, {
+							itemIndex: i,
+						});
+					}
+					endpoint = endpoint.replace(`{${param}}`, value);
+				}
 
-			// Replace URL params in endpoint
-			for (const param of urlParams) {
-				const value = String(this.getNodeParameter(param, i, '')).trim();
-				endpoint = endpoint.replace(`{${param}}`, value);
-			}
+				// Build body from node parameters
+				const body = await getBody.call(this, resource, operation, i);
 
-			// Generate body based on node parameters
-			const body = await getBody.call(this, resource, operation, i);
-
-			// Make the request
-			const response = await makeRequest.call(this, method as IHttpRequestMethods, baseUrlOverwrite, endpoint, body);
-
-			// Process response (array)
-			if (Array.isArray(response)) {
-				for (const item of response) {
-					returnData.push({
-						json: item as IDataObject,
-						pairedItem: { item: i }
+				// External request → wrap failures with NodeApiError
+				let response: unknown;
+				try {
+					response = await makeRequest.call(
+						this,
+						method as IHttpRequestMethods,
+						baseUrlOverwrite,
+						endpoint,
+						body,
+					);
+				} catch (error) {
+					if (this.continueOnFail && this.continueOnFail()) {
+						returnData.push({
+							json: { error: (error as Error)?.message ?? error },
+							pairedItem: { item: i },
+						});
+						continue;
+					}
+					throw new NodeApiError(this.getNode(), { message: (error as Error)?.message ?? String(error) }, {
+						itemIndex: i,
+						message: 'Anthias API request failed',
 					});
 				}
-			// Process response (object)
-			} else if (response && typeof response === 'object') {
-				returnData.push({
-					json: response as IDataObject,
-					pairedItem: { item: i }
-				});
-			// Process response (string)
-			} else {
-				// string / number / boolean, etc.
-				returnData.push({
-					json: { message: response as string },
-					pairedItem: { item: i }
-				});
+
+				// Normalize response
+				if (Array.isArray(response)) {
+					for (const item of response) {
+						returnData.push({ json: item as IDataObject, pairedItem: { item: i } });
+					}
+				} else if (response && typeof response === 'object') {
+					returnData.push({ json: response as IDataObject, pairedItem: { item: i } });
+				} else {
+					returnData.push({ json: { message: response as string }, pairedItem: { item: i } });
+				}
+			} catch (error) {
+				if (this.continueOnFail && this.continueOnFail()) {
+					returnData.push({
+						json: { error: (error as Error)?.message ?? error },
+						pairedItem: { item: i },
+					});
+					continue;
+				}
+				// Ensure consistent formatting if something unexpected bubbles up
+				if (!(error instanceof NodeApiError) && !(error instanceof NodeOperationError)) {
+					throw new NodeOperationError(this.getNode(), (error as Error)?.message ?? 'Unknown error', {
+						itemIndex: i,
+					});
+				}
+				throw error;
 			}
-		} catch (error) {
-			if (this.continueOnFail && this.continueOnFail()) {
-				returnData.push({
-					json: { error: error instanceof Error ? error.message : error },
-					pairedItem: { item: i }
-				});
-				continue;
-			}
-			throw error;
 		}
-	}
-	return [returnData];
+
+		return [returnData];
 	}
 }

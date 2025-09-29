@@ -48,10 +48,6 @@ export class AnthiasCredentialsApi implements ICredentialType {
 				username: '={{ $credentials.username }}',
 				password: '={{ $credentials.password }}',
 			},
-			qs: {
-				// Send this as part of the query string
-				n8n: 'rocks',
-			},
 		},
 	};
 
