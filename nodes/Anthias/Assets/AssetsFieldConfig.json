@@ -3,52 +3,66 @@
 	"getAllAssets": {
 		"url": "/assets",
 		"method": "GET",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"createAsset": {
 		"url": "/assets",
 		"method": "POST",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"getAsset": {
 		"url": "/assets/{assetId}",
 		"method": "GET",
 		"urlParams": [
 			"assetId"
-		]
+		],
+		"bodyType": "json"
 	},
 	"updateAsset": {
 		"url": "/assets/{assetId}",
 		"method": "PATCH",
 		"urlParams": [
 			"assetId"
-		]
+		],
+		"bodyType": "json"
 	},
 	"deleteAsset": {
 		"url": "/assets/{assetId}",
 		"method": "DELETE",
 		"urlParams": [
 			"assetId"
-		]
+		],
+		"bodyType": "json"
 	},
 	"getAssetContent": {
 		"url": "/assets/{assetId}/content",
 		"method": "GET",
 		"urlParams": [
 			"assetId"
-		]
+		],
+		"bodyType": "json"
 	},
 	"controlAssetPlayback": {
 		"url": "/assets/control/{command}",
 		"method": "GET",
 		"urlParams": [
 			"command"
-		]
+		],
+		"bodyType": "json"
 	},
 	"updatePlaylistOrder": {
 		"url": "/assets/order",
 		"method": "POST",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
+	},
+	"uploadFileAsset": {
+		"url": "/file_asset",
+		"method": "POST",
+		"urlParams": [],
+		"bodyType": "formData"
 	}
 }
 

@@ -1,3 +1,4 @@
+
 import { INodeProperties } from 'n8n-workflow';
 
 export const deviceDescription: INodeProperties[] = [
@@ -9,28 +10,64 @@ export const deviceDescription: INodeProperties[] = [
 		default: 'getDeviceSettings',
 		placeholder: 'Select operation',
 		options: [
-			{ name: 'Get Device Settings', value: 'getDeviceSettings', action: 'Get device settings' },
-			{ name: 'Get Integrations Information', value: 'getIntegrationsInformation', action: 'Get integrations information' },
-			{ name: 'Get System Information', value: 'getSystemInfo', action: 'Get system information' },
-			{ name: 'Reboot Device', value: 'rebootDevice', action: 'Reboot device' },
-			{ name: 'Shutdown Device', value: 'shutdownDevice', action: 'Shutdown device' },
-			{ name: 'Update Device Settings', value: 'updateDeviceSettings', action: 'Update device settings' },
+			{
+				name: 'Get Device IP Addresses',
+				value: 'getDeviceIP',
+				action: 'Get device IP addresses',
+			},
+			{
+				name: 'Get Device Settings',
+				value: 'getDeviceSettings',
+				action: 'Get device settings',
+			},
+			{
+				name: 'Get Integrations Information',
+				value: 'getIntegrationsInformation',
+				action: 'Get integrations information',
+			},
+			{
+				name: 'Get System Information',
+				value: 'getSystemInfo',
+				action: 'Get system information',
+			},
+			{
+				name: 'Reboot Device',
+				value: 'rebootDevice',
+				action: 'Reboot device',
+			},
+			{
+				name: 'Shutdown Device',
+				value: 'shutdownDevice',
+				action: 'Shutdown device',
+			},
+			{
+				name: 'Update Device Settings',
+				value: 'updateDeviceSettings',
+				action: 'Update device settings',
+			},
 		],
 		displayOptions: {
 			show: {
-				resource: ['device']
-			}
+				resource: ['device'],
+			},
 		},
 	},
 	{
 		displayName: 'Auth Backend',
 		name: 'auth_backend',
-		placeholder: 'Authentication backend ("" For no authentication / auth_basic - Basic authentication)',
+		placeholder:
+			'Authentication backend ("" For no authentication / auth_basic - Basic authentication)',
 		type: 'options',
 		required: true,
 		options: [
-			{ name: 'No Authentication', value: '' },
-			{ name: 'Basic Authentication', value: 'auth_basic' },
+			{
+				name: 'Basic Authentication',
+				value: 'auth_basic',
+			},
+			{
+				name: 'No Authentication',
+				value: '',
+			},
 		],
 		default: 'auth_basic',
 		displayOptions: {
@@ -60,15 +97,8 @@ export const deviceDescription: INodeProperties[] = [
 				placeholder: 'Device Audio Output',
 				type: 'string',
 				default: 'HDMI',
-				description: 'The audio output setting of the device (e.g., "HDMI", "Analog")',
-			},
-			{
-				displayName: 'Date Format',
-				name: 'date_format',
-				placeholder: 'Date format string',
-				type: 'string',
-				default: 'mm/dd/yyyy',
-				description: 'Date format string',
+				description:
+					'The audio output setting of the device (e.g., "HDMI", "Analog")',
 			},
 			{
 				displayName: 'Date Format',
@@ -117,7 +147,8 @@ export const deviceDescription: INodeProperties[] = [
 				},
 				placeholder: 'Enter password',
 				default: '',
-				description: 'Enter new password for authentication (default = "admin")',
+				description:
+					'Enter new password for authentication (default = "admin")',
 			},
 			{
 				displayName: 'Password (Confirm)',
@@ -128,7 +159,8 @@ export const deviceDescription: INodeProperties[] = [
 				},
 				placeholder: 'Enter password',
 				default: '',
-				description: 'Reenter new password for authentication (default = "admin")',
+				description:
+					'Reenter new password for authentication (default = "admin")',
 			},
 			{
 				displayName: 'Player Name',
@@ -136,7 +168,8 @@ export const deviceDescription: INodeProperties[] = [
 				placeholder: 'Device Player Name',
 				type: 'string',
 				default: '',
-				description: 'The name of the device as shown in the Anthias dashboard',
+				description:
+					'The name of the device as shown in the Anthias dashboard',
 			},
 			{
 				displayName: 'Show Splash',

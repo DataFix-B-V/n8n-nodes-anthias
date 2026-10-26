@@ -3,32 +3,44 @@
 	"getDeviceSettings": {
 		"url": "/device_settings",
 		"method": "GET",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"updateDeviceSettings": {
 		"url": "/device_settings",
 		"method": "PATCH",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"getSystemInfo": {
 		"url": "/info",
 		"method": "GET",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"getIntegrationsInformation": {
 		"url": "/integrations",
 		"method": "GET",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"rebootDevice": {
 		"url": "/reboot",
 		"method": "POST",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
 	},
 	"shutdownDevice": {
 		"url": "/shutdown",
 		"method": "POST",
-		"urlParams": []
+		"urlParams": [],
+		"bodyType": "json"
+	},
+	"getDeviceIP": {
+		"url": "/network/ip-addresses",
+		"method": "GET",
+		"urlParams": [],
+		"bodyType": "json"
 	}
 }
 
