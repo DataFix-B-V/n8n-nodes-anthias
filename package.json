@@ -51,5 +51,10 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "release-it": {
+    "git": {
+      "requireBranch": "master"
+    }
   }
 }
