@@ -11,6 +11,11 @@ export const deviceDescription: INodeProperties[] = [
 		placeholder: 'Select operation',
 		options: [
 			{
+				name: 'Get Integrations Information',
+				value: 'getIntegrationsInformation',
+				action: 'Get integrations information',
+			},
+			{
 				name: 'Get IP Addresses',
 				value: 'getDeviceIP',
 				action: 'Get device IP addresses',
@@ -19,11 +24,6 @@ export const deviceDescription: INodeProperties[] = [
 				name: 'Get Settings',
 				value: 'getDeviceSettings',
 				action: 'Get device settings',
-			},
-			{
-				name: 'Get Integrations Information',
-				value: 'getIntegrationsInformation',
-				action: 'Get integrations information',
 			},
 			{
 				name: 'Get System Information',

@@ -25,11 +25,6 @@ export const assetsDescription: INodeProperties[] = [
 				action: 'Delete an asset',
 			},
 			{
-				name: 'Get Many',
-				value: 'getAllAssets',
-				action: 'Get many assets',
-			},
-			{
 				name: 'Get',
 				value: 'getAsset',
 				action: 'Get an asset',
@@ -38,6 +33,11 @@ export const assetsDescription: INodeProperties[] = [
 				name: 'Get Content',
 				value: 'getAssetContent',
 				action: 'Get content of an asset',
+			},
+			{
+				name: 'Get Many',
+				value: 'getAllAssets',
+				action: 'Get many assets',
 			},
 			{
 				name: 'Update',

@@ -184,13 +184,15 @@ export class Anthias implements INodeType {
 					continue;
 				}
 
-				// Preserve existing n8n errors and their metadata.
-				if (
-					error instanceof NodeApiError ||
-					error instanceof NodeOperationError
-				) {
-					// eslint-disable-next-line @n8n/community-nodes/require-node-api-error
-					throw error;
+				if (error instanceof NodeApiError) {
+					throw new NodeApiError(
+						this.getNode(),
+						{ message: error.message },
+						{
+							message: error.message,
+							itemIndex: i,
+						},
+					);
 				}
 
 				throw new NodeOperationError(
