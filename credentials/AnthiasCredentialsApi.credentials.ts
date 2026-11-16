@@ -3,6 +3,7 @@ import {
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
+	Icon
 } from 'n8n-workflow';
 
 export class AnthiasCredentialsApi implements ICredentialType {
@@ -10,6 +11,8 @@ export class AnthiasCredentialsApi implements ICredentialType {
 	displayName = 'Anthias Credentials API';
 
 	documentationUrl = 'https://github.com/Screenly/Anthias/blob/master/docs/README.md#accessing-the-rest-api';
+
+	icon: Icon = 'file:AnthiasIcon.svg';
 
 	properties: INodeProperties[] = [
 		// The credentials to get from user and save encrypted.

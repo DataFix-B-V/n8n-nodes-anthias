@@ -11,12 +11,12 @@ export const deviceDescription: INodeProperties[] = [
 		placeholder: 'Select operation',
 		options: [
 			{
-				name: 'Get Device IP Addresses',
+				name: 'Get IP Addresses',
 				value: 'getDeviceIP',
 				action: 'Get device IP addresses',
 			},
 			{
-				name: 'Get Device Settings',
+				name: 'Get Settings',
 				value: 'getDeviceSettings',
 				action: 'Get device settings',
 			},
@@ -31,17 +31,17 @@ export const deviceDescription: INodeProperties[] = [
 				action: 'Get system information',
 			},
 			{
-				name: 'Reboot Device',
+				name: 'Reboot',
 				value: 'rebootDevice',
 				action: 'Reboot device',
 			},
 			{
-				name: 'Shutdown Device',
+				name: 'Shutdown',
 				value: 'shutdownDevice',
 				action: 'Shutdown device',
 			},
 			{
-				name: 'Update Device Settings',
+				name: 'Update Settings',
 				value: 'updateDeviceSettings',
 				action: 'Update device settings',
 			},

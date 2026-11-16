@@ -203,7 +203,7 @@ export async function createRequestOptions(
 		}
 	} catch (error) {
 		if (error instanceof NodeOperationError) {
-			throw error;
+			throw new NodeOperationError(this.getNode(), toJsonObject(error));
 		}
 
 		throw new NodeOperationError(this.getNode(), toJsonObject(error));

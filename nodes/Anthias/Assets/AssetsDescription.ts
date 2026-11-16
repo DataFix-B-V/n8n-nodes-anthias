@@ -10,37 +10,37 @@ export const assetsDescription: INodeProperties[] = [
 		default: 'getAllAssets',
 		options: [
 			{
-				name: 'Control Asset Playback',
+				name: 'Control Playback',
 				value: 'controlAssetPlayback',
-				action: 'Control asset playback',
+				action: 'Control playback',
 			},
 			{
-				name: 'Create Asset',
+				name: 'Create',
 				value: 'createAsset',
 				action: 'Create an asset',
 			},
 			{
-				name: 'Delete Asset',
+				name: 'Delete',
 				value: 'deleteAsset',
 				action: 'Delete an asset',
 			},
 			{
-				name: 'Get All Assets',
+				name: 'Get Many',
 				value: 'getAllAssets',
-				action: 'Get all assets',
+				action: 'Get many assets',
 			},
 			{
-				name: 'Get Asset',
+				name: 'Get',
 				value: 'getAsset',
 				action: 'Get an asset',
 			},
 			{
-				name: 'Get Asset Content',
+				name: 'Get Content',
 				value: 'getAssetContent',
-				action: 'Get asset content',
+				action: 'Get content of an asset',
 			},
 			{
-				name: 'Update Asset',
+				name: 'Update',
 				value: 'updateAsset',
 				action: 'Update an asset',
 			},
@@ -50,7 +50,7 @@ export const assetsDescription: INodeProperties[] = [
 				action: 'Update playlist order',
 			},
 			{
-				name: 'Upload File Asset',
+				name: 'Upload File',
 				value: 'uploadFileAsset',
 				action: 'Upload a file as an asset',
 			},

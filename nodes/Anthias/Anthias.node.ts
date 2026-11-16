@@ -1,3 +1,4 @@
+
 import {
 	IDataObject,
 	IExecuteFunctions,
@@ -19,8 +20,12 @@ export class Anthias implements INodeType {
 		name: 'anthias',
 		group: ['transform'],
 		version: 1,
+		subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
 		description: 'Node for controlling Anthias deployments with the Anthias API',
-		icon: 'file:AnthiasIcon.svg',
+		icon: {
+			light: 'file:AnthiasIcon.svg',
+			dark: 'file:AnthiasIcon.dark.svg',
+		},
 		defaults: {
 			name: 'Anthias',
 		},
@@ -65,16 +70,25 @@ export class Anthias implements INodeType {
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		const baseUrlOverwrite = ((this.getNodeParameter('overwriteBaseUrl', 0, '') as string) || '').trim();
+		const baseUrlOverwrite = (
+			(this.getNodeParameter('overwriteBaseUrl', 0, '') as string) || ''
+		).trim();
+
 		const resource = this.getNodeParameter('resource', 0) as string;
 		const operation = this.getNodeParameter('operation', 0) as string;
 
 		if (!resource) {
-			throw new NodeOperationError(this.getNode(), '“Resource” is required.');
+			throw new NodeOperationError(
+				this.getNode(),
+				'“Resource” is required.',
+			);
 		}
 
 		if (!operation) {
-			throw new NodeOperationError(this.getNode(), '“Operation” is required for the selected resource.');
+			throw new NodeOperationError(
+				this.getNode(),
+				'“Operation” is required for the selected resource.',
+			);
 		}
 
 		const items = this.getInputData();
@@ -82,57 +96,55 @@ export class Anthias implements INodeType {
 
 		for (let i = 0; i < items.length; i++) {
 			try {
-				let [endpoint, method, urlParams, bodyType] = await createRequestOptions.call(this, resource, operation);
+				let [endpoint, method, urlParams, bodyType] =
+					await createRequestOptions.call(this, resource, operation);
 
 				for (const param of urlParams) {
-					const value = String(this.getNodeParameter(param, i, '')).trim();
+					const value = String(
+						this.getNodeParameter(param, i, ''),
+					).trim();
 
 					if (!value) {
-						throw new NodeOperationError(this.getNode(), `Missing required parameter: “${param}”`, {
-							itemIndex: i,
-						});
+						throw new NodeOperationError(
+							this.getNode(),
+							`Missing required parameter: “${param}”`,
+							{ itemIndex: i },
+						);
 					}
 
-					endpoint = endpoint.replace(`{${param}}`, encodeURIComponent(value));
+					endpoint = endpoint.replace(
+						`{${param}}`,
+						encodeURIComponent(value),
+					);
 				}
 
-				const body = bodyType === 'none' ? {} : await getBody.call(this, resource, operation, i);
+				const body =
+					bodyType === 'none'
+						? {}
+						: await getBody.call(this, resource, operation, i);
 
 				const headers: IDataObject = {};
 
 				// POST /api/v2/file_asset requires X-Upload-Id
 				if (resource === 'asset' && operation === 'uploadFileAsset') {
-					const uploadId = String(this.getNodeParameter('upload_id', i, '')).trim();
+					const uploadId = String(
+						this.getNodeParameter('upload_id', i, ''),
+					).trim();
 
 					if (uploadId) {
 						headers['X-Upload-Id'] = uploadId;
 					}
 				}
 
-				let response: unknown;
-
-				try {
-					response = await makeRequest.call(this, method,
-						baseUrlOverwrite,
-						endpoint,
-						body,
-						bodyType,
-						headers,
-					);
-				} catch (error) {
-					if (this.continueOnFail()) {
-						returnData.push({
-							json: {
-								error: error instanceof Error ? error.message : String(error),
-							},
-							pairedItem: { item: i },
-						});
-
-						continue;
-					}
-
-					throw error;
-				}
+				const response: unknown = await makeRequest.call(
+					this,
+					method,
+					baseUrlOverwrite,
+					endpoint,
+					body,
+					bodyType,
+					headers,
+				);
 
 				if (Array.isArray(response)) {
 					for (const responseItem of response) {
@@ -149,7 +161,10 @@ export class Anthias implements INodeType {
 				} else {
 					returnData.push({
 						json: {
-							message: response === null ? null : String(response),
+							message:
+								response === null
+									? null
+									: String(response),
 						},
 						pairedItem: { item: i },
 					});
@@ -158,7 +173,10 @@ export class Anthias implements INodeType {
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: {
-							error: error instanceof Error ? error.message : String(error),
+							error:
+								error instanceof Error
+									? error.message
+									: String(error),
 						},
 						pairedItem: { item: i },
 					});
@@ -166,15 +184,22 @@ export class Anthias implements INodeType {
 					continue;
 				}
 
-				if (!(error instanceof NodeApiError) && !(error instanceof NodeOperationError)) {
-					throw new NodeOperationError(
-						this.getNode(),
-						error instanceof Error ? error.message : 'Unknown error',
-						{ itemIndex: i },
-					);
+				// Preserve existing n8n errors and their metadata.
+				if (
+					error instanceof NodeApiError ||
+					error instanceof NodeOperationError
+				) {
+					// eslint-disable-next-line @n8n/community-nodes/require-node-api-error
+					throw error;
 				}
 
-				throw error;
+				throw new NodeOperationError(
+					this.getNode(),
+					error instanceof Error
+						? error.message
+						: 'Unknown error',
+					{ itemIndex: i },
+				);
 			}
 		}
 
